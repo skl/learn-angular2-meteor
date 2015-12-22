@@ -7,19 +7,24 @@ import {NgFor} from 'angular2/common';
 import {bootstrap} from 'angular2-meteor';
 
 import {Parties} from 'collections/parties';
+import {PartiesForm} from "client/parties-form/parties-form";
 
 @Component({
     selector: 'app'
 })
 @View({
     templateUrl: 'client/app.html',
-    directives: [NgFor]
+    directives: [NgFor, PartiesForm]
 })
 class Socially {
     parties: Mongo.Cursor<Object>;
 
     constructor () {
         this.parties = Parties.find();
+    }
+
+    removeParty(party) {
+        Parties.remove(party._id);
     }
 }
 

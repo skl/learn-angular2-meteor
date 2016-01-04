@@ -1,5 +1,14 @@
-<header>
-    <h2>{{party.name}}</h2>
-    <p>{{party.description}}</p>
-    <p>{{party.location}}</p>
-</header>
+<form (submit)="saveParty(party)">
+    <label>Name</label>
+    <input type="text" [(ngModel)]="party.name">
+    <p>{{party.name}}</p>
+
+    <label>Description</label>
+    <input type="text" [(ngModel)]="party.description">
+
+    <label>Location</label>
+    <input type="text" [(ngModel)]="party.location">
+
+    <button type="submit">Save</button>
+    <button [routerLink]="['/PartiesList']">Cancel</button>
+</form>

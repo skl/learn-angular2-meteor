@@ -1,10 +1,11 @@
 /// <reference path="../../typings/angular2-meteor.d.ts" />
+/// <reference path="../../typings/meteor-accounts.d.ts" />
 
 import {Component, View} from 'angular2/core';
-
 import {FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators} from 'angular2/common';
-
 import {Parties} from 'collections/parties';
+import {InjectUser} from 'meteor-accounts';
+import {MeteorComponent} from 'angular2-meteor';
 
 @Component({
     selector: 'parties-form'
@@ -13,10 +14,13 @@ import {Parties} from 'collections/parties';
     templateUrl: 'client/parties-form/parties-form.html',
     directives: [FORM_DIRECTIVES]
 })
-export class PartiesForm {
+@InjectUser()
+export class PartiesForm extends MeteorComponent {
     partiesForm: ControlGroup;
 
     constructor() {
+        super();
+
         var fb = new FormBuilder();
         this.partiesForm = fb.group({
             name: ['', Validators.required],
@@ -27,15 +31,20 @@ export class PartiesForm {
 
     addParty(party) {
         if (this.partiesForm.valid) {
-            Parties.insert({
-                name: party.name,
-                description: party.description,
-                location: party.location
-            });
+            if (this.user) {
+                Parties.insert({
+                    name: party.name,
+                    description: party.description,
+                    location: party.location,
+                    owner: this.user._id
+                });
 
-            (<Control>this.partiesForm.controls['name']).updateValue('', false);
-            (<Control>this.partiesForm.controls['description']).updateValue('', false);
-            (<Control>this.partiesForm.controls['location']).updateValue('', false);
+                (<Control>this.partiesForm.controls['name']).updateValue('', false);
+                (<Control>this.partiesForm.controls['description']).updateValue('', false);
+                (<Control>this.partiesForm.controls['location']).updateValue('', false);
+            } else {
+                alert('Please log in to add a party');
+            }
         }
     }
 }

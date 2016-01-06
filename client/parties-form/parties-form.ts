@@ -25,7 +25,8 @@ export class PartiesForm extends MeteorComponent {
         this.partiesForm = fb.group({
             name: ['', Validators.required],
             description: [''],
-            location: ['', Validators.required]
+            location: ['', Validators.required],
+            public: [false]
         });
     }
 
@@ -36,12 +37,14 @@ export class PartiesForm extends MeteorComponent {
                     name: party.name,
                     description: party.description,
                     location: party.location,
+                    public: party.public,
                     owner: this.user._id
                 });
 
                 (<Control>this.partiesForm.controls['name']).updateValue('', false);
                 (<Control>this.partiesForm.controls['description']).updateValue('', false);
                 (<Control>this.partiesForm.controls['location']).updateValue('', false);
+                (<Control>this.partiesForm.controls['public']).updateValue('', false);
             } else {
                 alert('Please log in to add a party');
             }

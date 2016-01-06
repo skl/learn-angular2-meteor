@@ -3,5 +3,6 @@ declare type Party = {
     name: string,
     description?: string,
     location: string,
+    public: boolean,
     owner?: string
 }

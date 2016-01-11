@@ -7,6 +7,7 @@ import {RouteParams, CanActivate, ComponentInstruction} from 'angular2/router';
 import {Parties} from 'collections/parties';
 import {RouterLink} from 'angular2/router';
 import {MeteorComponent} from 'angular2-meteor';
+import {DisplayName} from 'client/lib/pipes';
 
 function checkPermissions(instruction: ComponentInstruction) {
     var partyId = instruction.params['partyId'];
@@ -18,18 +19,24 @@ function checkPermissions(instruction: ComponentInstruction) {
     selector: 'party-details'
 })
 @View({
+    pipes: [DisplayName],
     templateUrl: '/client/party-details/party-details.html',
     directives: [RouterLink, FORM_DIRECTIVES]
 })
 @CanActivate(checkPermissions)
 export class PartyDetails extends MeteorComponent {
     party: Party;
+    users: Mongo.Cursor<Object>;
 
     constructor(params: RouteParams) {
         super();
         var partyId = params.get('partyId');
         this.subscribe('party', partyId, () => {
             this.party = Parties.findOne(partyId);
+        }, true);
+
+        this.subscribe('uninvited', partyId, () => {
+            this.users = Meteor.users.find({_id: {$ne: Meteor.userId()}});
         }, true);
     }
 

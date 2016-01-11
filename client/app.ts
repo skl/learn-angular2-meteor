@@ -6,6 +6,10 @@ import {ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig, APP_BASE_HREF} from 'a
 import {PartiesList} from 'client/parties-list/parties-list';
 import {PartyDetails} from 'client/party-details/party-details';
 
+Accounts.ui.config({
+    passwordSignupFields: 'USERNAME_AND_EMAIL'
+});
+
 @Component({
     selector: 'app'
 })

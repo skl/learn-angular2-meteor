@@ -20,3 +20,7 @@ barbatus:ng2-meteor-accounts-ui
 barbatus:ng2-meteor-accounts
 accounts-facebook
 accounts-twitter
+reactive-var
+barbatus:ng2-pagination
+anti:fake
+tmeasday:publish-counts

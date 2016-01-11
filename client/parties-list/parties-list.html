@@ -3,8 +3,15 @@
     <input type="search" #searchtext placeholder="Search by Location">
     <button type="button" (click)="search(searchtext.value)">Search</button>
     <accounts-ui></accounts-ui>
+    <h1>Parties:</h1>
+    <div>
+        <select #sort (change)="changeSortOrder(sort.value)">
+            <option value="1" selected>Ascending</option>
+            <option value="-1">Descending</option>
+        </select>
+    </div>
     <ul>
-        <li *ngFor="#party of parties">
+        <li *ngFor="#party of parties | paginate:{currentPage: 1, itemsPerPage: pageSize, totalItems: partiesSize}">
             <a [routerLink]="['/PartyDetails', {partyId: party._id}]">{{party.name}}</a>
             <p>{{party.description}}</p>
             <p>{{party.location}}</p>
@@ -12,4 +19,5 @@
             <button (click)="removeParty(party)">X</button>
         </li>
     </ul>
+    <pagination-controls (change)="onPageChanged($event.page)"></pagination-controls>
 </div>

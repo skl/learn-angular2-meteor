@@ -1,3 +1,5 @@
+/// <reference path="../typings/fake.d.ts" />
+
 import {Parties} from 'collections/parties';
 
 export function loadParties() {
@@ -5,28 +7,12 @@ export function loadParties() {
         return;
     }
 
-    var parties = [
-        {
-            'name': 'Dubstep-Free Zone',
-            'description': 'Can we please just for an evening not listen to dubstep',
-            'location': 'Palo Alto',
-            'public': true
-        },
-        {
-            'name': 'All dubstep all the time',
-            'description': 'Get it on!',
-            'location': 'Palo Alto',
-            'public': true
-        },
-        {
-            'name': 'Savage lounging',
-            'description': 'Leisure suit required. And only fiercest manners.',
-            'location': 'San Fransisco',
-            'public': false
-        }
-    ];
-
-    for (var i = 0; i < parties.length; i++) {
-        Parties.insert(parties[i]);
+    for (var i = 0; i < 27; i++) {
+        Parties.insert({
+            name: Fake.sentence(50),
+            location: Fake.sentence(10),
+            description: Fake.sentence(100),
+            public: true
+        });
     }
 };

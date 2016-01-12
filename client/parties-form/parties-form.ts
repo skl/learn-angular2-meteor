@@ -17,6 +17,7 @@ import {MeteorComponent} from 'angular2-meteor';
 @InjectUser()
 export class PartiesForm extends MeteorComponent {
     partiesForm: ControlGroup;
+    user: Meteor.User;
 
     constructor() {
         super();

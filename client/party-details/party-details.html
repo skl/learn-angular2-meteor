@@ -1,19 +1,19 @@
 <form (submit)="saveParty(party)" *ngIf="party">
     <label>Name</label>
-    <input type="text" [(ngModel)]="party.name">
+    <input [disabled]="!isOwner" type="text" [(ngModel)]="party.name">
     <p>{{party.name}}</p>
 
     <label>Description</label>
-    <input type="text" [(ngModel)]="party.description">
+    <input [disabled]="!isOwner" type="text" [(ngModel)]="party.description">
 
     <label>Location</label>
-    <input type="text" [(ngModel)]="party.location">
+    <input [disabled]="!isOwner" type="text" [(ngModel)]="party.location">
 
-    <button type="submit">Save</button>
+    <button [disabled]="!isOwner" type="submit">Save</button>
     <button [routerLink]="['/PartiesList']">Cancel</button>
 </form>
 
-<ul>
+<ul *ngIf="isOwner || isPublic">
     Users to invite:
     <li *ngFor="#user of users">
         <div>{{ user | displayName }}</div>
@@ -21,7 +21,7 @@
     </li>
 </ul>
 
-<div>
+<div *ngIf="isInvited">
     <h2>Reply to the invitation</h2>
     <input type="button" value="I'm going!" (click)="reply('yes')">
     <input type="button" value="Maybe" (click)="reply('maybe')">

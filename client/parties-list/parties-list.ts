@@ -32,6 +32,7 @@ export class PartiesList extends MeteorComponent {
     nameOrder: ReactiveVar<number> = new ReactiveVar<number>(1);
     partiesSize: number = 0;
     location: ReactiveVar<string> = new ReactiveVar<string>(null);
+    user: Meteor.User;
 
     constructor () {
         super();
@@ -67,5 +68,13 @@ export class PartiesList extends MeteorComponent {
 
     changeSortOrder(nameOrder) {
         this.nameOrder.set(parseInt(nameOrder));
+    }
+
+    isOwner(party): boolean {
+        if (this.user) {
+            return this.user._id === party.owner;
+        }
+
+        return false;
     }
 }

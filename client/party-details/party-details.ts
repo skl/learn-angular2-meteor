@@ -3,26 +3,12 @@
 
 import {Component, View} from 'angular2/core';
 import {FORM_DIRECTIVES} from 'angular2/common';
-import {RouteParams, CanActivate, ComponentInstruction} from 'angular2/router';
+import {RouteParams} from 'angular2/router';
 import {Parties} from 'collections/parties';
 import {RouterLink} from 'angular2/router';
 import {MeteorComponent} from 'angular2-meteor';
 import {DisplayName} from 'client/lib/pipes';
-
-function checkPermissions(instruction: ComponentInstruction) {
-    var partyId = instruction.params['partyId'];
-    var party = Parties.findOne(partyId);
-
-    if (!party) {
-        return false;
-    } else if (party.owner == Meteor.userId()) {
-        return true;
-    } else if ((party.invited || []).indexOf(Meteor.userId()) !== -1) {
-        return true;
-    }
-
-    return false;
-}
+import {RequireUser, InjectUser} from 'meteor-accounts';
 
 @Component({
     selector: 'party-details'
@@ -32,10 +18,12 @@ function checkPermissions(instruction: ComponentInstruction) {
     templateUrl: '/client/party-details/party-details.html',
     directives: [RouterLink, FORM_DIRECTIVES]
 })
-@CanActivate(checkPermissions)
+@RequireUser()
+@InjectUser()
 export class PartyDetails extends MeteorComponent {
     party: Party;
     users: Mongo.Cursor<Object>;
+    user: Meteor.User;
 
     constructor(params: RouteParams) {
         super();
@@ -61,6 +49,31 @@ export class PartyDetails extends MeteorComponent {
                 }
             });
         }
+    }
+
+    get isOwner() {
+        if (this.party && this.user) {
+            return this.user._id === this.party.owner;
+        }
+
+        return false;
+    }
+
+    get isPublic() {
+        if (this.party) {
+            return this.party.public;
+        }
+
+        return false;
+    }
+
+    get isInvited() {
+        if (this.party && this.user) {
+            let invited = this.party.invited || [];
+            return invited.indexOf(this.user._id) !== -1;
+        }
+
+        return false;
     }
 
     saveParty(party) {

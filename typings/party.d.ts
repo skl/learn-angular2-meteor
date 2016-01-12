@@ -5,5 +5,11 @@ declare type Party = {
     location: string,
     public: boolean,
     owner?: string,
-    invited?: Array<string>
+    invited?: Array<string>,
+    rsvps?: Array<RSVP>
+}
+
+declare type RSVP = {
+    userId: string,
+    response: string
 }

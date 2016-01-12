@@ -13,6 +13,7 @@ import {AccountsUI} from 'meteor-accounts-ui';
 import {InjectUser} from 'meteor-accounts';
 import {MeteorComponent} from 'angular2-meteor';
 import {PaginationService, PaginatePipe, PaginationControlsCpm} from 'ng2-pagination';
+import {RsvpPipe} from 'client/lib/pipes';
 
 @Component({
     selector: 'parties-list',
@@ -21,7 +22,7 @@ import {PaginationService, PaginatePipe, PaginationControlsCpm} from 'ng2-pagina
 @View({
     templateUrl: 'client/parties-list/parties-list.html',
     directives: [PartiesForm, RouterLink, AccountsUI, PaginationControlsCpm],
-    pipes: [PaginatePipe]
+    pipes: [PaginatePipe, RsvpPipe]
 })
 @InjectUser()
 export class PartiesList extends MeteorComponent {

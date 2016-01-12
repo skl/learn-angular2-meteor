@@ -24,3 +24,5 @@ reactive-var
 barbatus:ng2-pagination
 anti:fake
 tmeasday:publish-counts
+check
+email

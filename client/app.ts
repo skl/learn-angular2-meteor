@@ -5,6 +5,7 @@ import {bootstrap} from 'angular2-meteor';
 import {ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig, APP_BASE_HREF} from 'angular2/router';
 import {PartiesList} from 'client/parties-list/parties-list';
 import {PartyDetails} from 'client/party-details/party-details';
+import 'collections/methods';
 
 Accounts.ui.config({
     passwordSignupFields: 'USERNAME_AND_EMAIL'

@@ -12,7 +12,16 @@ import {DisplayName} from 'client/lib/pipes';
 function checkPermissions(instruction: ComponentInstruction) {
     var partyId = instruction.params['partyId'];
     var party = Parties.findOne(partyId);
-    return (party && party.owner == Meteor.userId());
+
+    if (!party) {
+        return false;
+    } else if (party.owner == Meteor.userId()) {
+        return true;
+    } else if ((party.invited || []).indexOf(Meteor.userId()) !== -1) {
+        return true;
+    }
+
+    return false;
 }
 
 @Component({
@@ -32,12 +41,26 @@ export class PartyDetails extends MeteorComponent {
         super();
         var partyId = params.get('partyId');
         this.subscribe('party', partyId, () => {
-            this.party = Parties.findOne(partyId);
-        }, true);
+            this.autorun(() => {
+                this.party = Parties.findOne(partyId);
+                this.getUsers(this.party);
+            }, true);
+        });
 
         this.subscribe('uninvited', partyId, () => {
-            this.users = Meteor.users.find({_id: {$ne: Meteor.userId()}});
+            this.getUsers(this.party);
         }, true);
+    }
+
+    getUsers(party) {
+        if (party) {
+            this.users = Meteor.users.find({
+                _id: {
+                    $nin: party.invited || [],
+                    $ne: Meteor.userId()
+                }
+            });
+        }
     }
 
     saveParty(party) {
@@ -52,5 +75,26 @@ export class PartyDetails extends MeteorComponent {
         } else {
             alert('Please log in to change this party');
         }
+    }
+
+    invite(user) {
+        this.call('invite', this.party._id, user._id, (error) => {
+            if (error) {
+                alert(`Failed to invite due to ${error}`);
+                return;
+            }
+
+            alert('User successfully invited.');
+        });
+    }
+
+    reply(rsvp) {
+        this.call('reply', this.party._id, rsvp, (error) => {
+            if (error) {
+                alert(`Failed to reply due to ${error}`);
+            } else {
+                alert('You successfully replied.');
+            }
+        });
     }
 }

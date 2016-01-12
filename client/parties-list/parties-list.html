@@ -17,6 +17,12 @@
             <p>{{party.location}}</p>
             <p *ngIf="party.owner">Created by {{party.owner}}</p>
             <button (click)="removeParty(party)">X</button>
+            <div>
+                Who is coming:
+                Yes - {{ party | rsvp:'yes' }}
+                Maybe - {{ party | rsvp:'maybe' }}
+                No - {{ party | rsvp:'no' }}
+            </div>
         </li>
     </ul>
     <pagination-controls (change)="onPageChanged($event.page)"></pagination-controls>
